@@ -40,6 +40,10 @@ fleettrack/
 │       │   ├── logisticsController.js
 │       │   └── shipmentController.js
 │       └── routes/logisticsRoutes.js
+├── mobile-service/              ← Aplikasi Flutter (Mobile)
+│   ├── Dockerfile
+│   ├── .env                     ← Config API
+│   └── lib/
 └── frontend-service/
     ├── Dockerfile
     ├── nginx.conf
@@ -116,6 +120,7 @@ Password : admin123
 ## Akses di Browser
 ```
 Frontend   : http://localhost:3000
+Mobile Web : http://localhost:8080 (Jika dijalankan lokal)
 Auth API   : http://localhost:5001/api/health
 Logistics  : http://localhost:5002/api/health
 ```
