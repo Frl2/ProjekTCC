@@ -6,7 +6,13 @@ COPY . .
 RUN npm run build
 
 FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Hapus default config nginx
+RUN rm /etc/nginx/conf.d/default.conf
+# Copy config kita yang baru (port 8080)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+# Copy hasil build react
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Cloud Run mewajibkan port 8080
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
