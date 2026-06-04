@@ -2,7 +2,7 @@ $PROJECT_ID = "e-42-498310"
 $REGION = "asia-southeast2"
 $DB_USER = "fleettrack_user"
 $DB_PASSWORD = "fleettrack123"
-$CLOUD_SQL_CONN = "e-42-498310:us-central1:fleettrack-mysql"
+$CLOUD_SQL_CONN = "e-42-498310:asia-southeast2:fleettrack-mysql"
 $DB_HOST_CLOUDRUN = "/cloudsql/$CLOUD_SQL_CONN"
 
 Write-Host "--- 1. Membuat User Database Baru (fleettrack_user) ---" -ForegroundColor Cyan

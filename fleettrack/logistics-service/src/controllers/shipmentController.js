@@ -53,11 +53,18 @@ exports.getShipment = async (req, res) => {
 exports.createShipment = async (req, res) => {
   try {
     const { route_id, vehicle_id, driver_id, sender_name, receiver_name, receiver_phone, receiver_address, weight_kg, description, scheduled_date } = req.body;
+    
+    // Convert empty strings to null for optional foreign keys and numbers
+    const v_id = vehicle_id === '' ? null : vehicle_id;
+    const d_id = driver_id === '' ? null : driver_id;
+    const w_kg = weight_kg === '' ? null : weight_kg;
+    const s_date = scheduled_date === '' ? null : scheduled_date;
+
     const tracking_number = 'FT-' + Date.now().toString().slice(-8) + '-' + uuidv4().slice(0, 4).toUpperCase();
 
     const [result] = await pool.execute(
       'INSERT INTO shipments (tracking_number, route_id, vehicle_id, driver_id, sender_name, receiver_name, receiver_phone, receiver_address, weight_kg, description, scheduled_date) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-      [tracking_number, route_id, vehicle_id, driver_id, sender_name, receiver_name, receiver_phone, receiver_address, weight_kg, description, scheduled_date]
+      [tracking_number, route_id, v_id, d_id, sender_name, receiver_name, receiver_phone, receiver_address, w_kg, description, s_date]
     );
 
     await pool.execute(

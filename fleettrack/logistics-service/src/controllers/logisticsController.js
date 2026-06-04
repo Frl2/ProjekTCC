@@ -19,9 +19,11 @@ exports.getVehicle = async (req, res) => {
 exports.createVehicle = async (req, res) => {
   try {
     const { license_plate, type, brand, model, year, capacity_kg, status } = req.body;
+    const v_year = year === '' ? null : year;
+    const v_cap = capacity_kg === '' ? null : capacity_kg;
     const [result] = await pool.execute(
       'INSERT INTO vehicles (license_plate, type, brand, model, year, capacity_kg, status) VALUES (?,?,?,?,?,?,?)',
-      [license_plate, type, brand, model, year, capacity_kg, status || 'available']
+      [license_plate, type, brand, model, v_year, v_cap, status || 'available']
     );
     res.status(201).json({ success: true, message: 'Kendaraan berhasil ditambahkan', data: { id: result.insertId } });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
@@ -30,9 +32,11 @@ exports.createVehicle = async (req, res) => {
 exports.updateVehicle = async (req, res) => {
   try {
     const { license_plate, type, brand, model, year, capacity_kg, status } = req.body;
+    const v_year = year === '' ? null : year;
+    const v_cap = capacity_kg === '' ? null : capacity_kg;
     await pool.execute(
       'UPDATE vehicles SET license_plate=?, type=?, brand=?, model=?, year=?, capacity_kg=?, status=?, updated_at=NOW() WHERE id=?',
-      [license_plate, type, brand, model, year, capacity_kg, status, req.params.id]
+      [license_plate, type, brand, model, v_year, v_cap, status, req.params.id]
     );
     res.json({ success: true, message: 'Kendaraan berhasil diupdate' });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }

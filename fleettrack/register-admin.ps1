@@ -1,4 +1,4 @@
-$AUTH_SERVICE_URL = "https://fleettrack-auth-service-985858089421.asia-southeast2.run.app"
+$AUTH_SERVICE_URL = "https://fleettrack-auth-service-njyegk5lcq-et.a.run.app"
 $REGISTER_URL = "$AUTH_SERVICE_URL/api/auth/register"
 
 $userData = @{

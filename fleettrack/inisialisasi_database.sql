@@ -1,5 +1,5 @@
 -- ==========================================
--- SCRIPT INISIALISASI DATABASE FLEETTRACK
+-- SCRIPT INISIALISASI DATABASE FLEETTRACK (FIXED)
 -- ==========================================
 
 -- 1. SETUP DATABASE AUTH
@@ -123,6 +123,7 @@ CREATE TABLE IF NOT EXISTS shipments (
   receiver_phone VARCHAR(20),
   receiver_address TEXT,
   weight_kg DECIMAL(10,2),
+  description TEXT,
   status ENUM('PENDING','PICKED_UP','ON_DELIVERY','ARRIVED_AT_WAREHOUSE','DELIVERED','CANCELLED') DEFAULT 'PENDING',
   scheduled_date DATE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -138,14 +139,17 @@ CREATE TABLE IF NOT EXISTS tracking_logs (
   shipment_id INT NOT NULL,
   status VARCHAR(50) NOT NULL,
   location VARCHAR(200),
+  latitude DECIMAL(10,8),
+  longitude DECIMAL(11,8),
+  notes TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (shipment_id) REFERENCES shipments(id) ON DELETE CASCADE
 );
 
 -- Data Awal Logistics
-INSERT IGNORE INTO warehouses (name, city, address) VALUES 
-('Gudang Jakarta Pusat', 'Jakarta', 'Jl. Sudirman No. 1'),
-('Gudang Surabaya', 'Surabaya', 'Jl. Raya Darmo No. 10');
+INSERT IGNORE INTO warehouses (name, city, address, latitude, longitude) VALUES 
+('Gudang Jakarta Pusat', 'Jakarta', 'Jl. Sudirman No. 1', -6.2088, 106.8456),
+('Gudang Surabaya', 'Surabaya', 'Jl. Raya Darmo No. 10', -7.2575, 112.7521);
 
 INSERT IGNORE INTO vehicles (license_plate, type, brand, status) VALUES 
 ('B 1234 ABC', 'Truk Besar', 'Hino', 'available'),
