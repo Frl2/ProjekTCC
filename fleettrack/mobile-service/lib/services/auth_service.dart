@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'base_service.dart';
 import '../core/api_config.dart';
