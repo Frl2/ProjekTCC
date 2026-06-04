@@ -1,0 +1,81 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: fleettrack-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: auth_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - fleettrack-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot123"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+  auth-service:
+    build: ./auth-service
+    container_name: fleettrack-auth
+    restart: always
+    ports:
+      - "5001:5001"
+    environment:
+      PORT: 5001
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root123
+      DB_NAME: auth_db
+      JWT_SECRET: fleettrack_jwt_secret_key_2024
+      JWT_EXPIRES_IN: 24h
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - fleettrack-network
+
+  logistics-service:
+    build: ./logistics-service
+    container_name: fleettrack-logistics
+    restart: always
+    ports:
+      - "5002:5002"
+    environment:
+      PORT: 5002
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root123
+      DB_NAME: logistics_db
+      JWT_SECRET: fleettrack_jwt_secret_key_2024
+      AUTH_SERVICE_URL: http://auth-service:5001
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - fleettrack-network
+
+  frontend-service:
+    build: ./frontend-service
+    container_name: fleettrack-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - auth-service
+      - logistics-service
+    networks:
+      - fleettrack-network
+
+networks:
+  fleettrack-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
