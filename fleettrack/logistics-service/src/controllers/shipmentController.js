@@ -84,25 +84,29 @@ exports.updateStatus = async (req, res) => {
     if (!validStatuses.includes(status))
       return res.status(400).json({ success: false, message: 'Status tidak valid' });
 
+    // Handle undefined values to prevent mysql2 errors
+    const loc = location === undefined ? null : location;
+    const lat = latitude === undefined ? null : latitude;
+    const lng = longitude === undefined ? null : longitude;
+    const nts = notes === undefined ? null : notes;
+
     await pool.execute('UPDATE shipments SET status=?, updated_at=NOW() WHERE id=?', [status, req.params.id]);
     await pool.execute(
       'INSERT INTO tracking_logs (shipment_id, status, location, latitude, longitude, notes) VALUES (?,?,?,?,?,?)',
-      [req.params.id, status, location, latitude, longitude, notes]
+      [req.params.id, status, loc, lat, lng, nts]
     );
 
-    if (status === 'ON_DELIVERY') {
-      const [s] = await pool.execute('SELECT vehicle_id, driver_id FROM shipments WHERE id=?', [req.params.id]);
-      if (s.length > 0) {
-        if (s[0].vehicle_id) await pool.execute("UPDATE vehicles SET status='on_trip' WHERE id=?", [s[0].vehicle_id]);
-        if (s[0].driver_id) await pool.execute("UPDATE drivers SET status='on_trip' WHERE id=?", [s[0].driver_id]);
-      }
-    }
-
-    if (status === 'DELIVERED' || status === 'CANCELLED') {
-      const [s] = await pool.execute('SELECT vehicle_id, driver_id FROM shipments WHERE id=?', [req.params.id]);
-      if (s.length > 0) {
-        if (s[0].vehicle_id) await pool.execute("UPDATE vehicles SET status='available' WHERE id=?", [s[0].vehicle_id]);
-        if (s[0].driver_id) await pool.execute("UPDATE drivers SET status='available' WHERE id=?", [s[0].driver_id]);
+    // Update vehicle and driver status based on shipment status
+    const [shipmentRows] = await pool.execute('SELECT vehicle_id, driver_id FROM shipments WHERE id=?', [req.params.id]);
+    if (shipmentRows.length > 0) {
+      const { vehicle_id, driver_id } = shipmentRows[0];
+      
+      if (status === 'ON_DELIVERY') {
+        if (vehicle_id) await pool.execute("UPDATE vehicles SET status='on_trip' WHERE id=?", [vehicle_id]);
+        if (driver_id) await pool.execute("UPDATE drivers SET status='on_trip' WHERE id=?", [driver_id]);
+      } else if (status === 'DELIVERED' || status === 'CANCELLED') {
+        if (vehicle_id) await pool.execute("UPDATE vehicles SET status='available' WHERE id=?", [vehicle_id]);
+        if (driver_id) await pool.execute("UPDATE drivers SET status='available' WHERE id=?", [driver_id]);
       }
     }
 
