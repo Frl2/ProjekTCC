@@ -78,8 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisSpacing: 12,
       crossAxisSpacing: 12,
       children: [
-        _buildStatCard('Total Armada', _stats?['total_vehicles']?.toString() ?? '0', Icons.local_shipping, Colors.blue),
-        _buildStatCard('Total Driver', _stats?['total_drivers']?.toString() ?? '0', Icons.person, Colors.green),
         _buildStatCard('Total Pengiriman', _stats?['total_shipments']?.toString() ?? '0', Icons.inventory, Colors.orange),
         _buildStatCard('Pengiriman Aktif', _stats?['active_shipments']?.toString() ?? '0', Icons.route, Colors.purple),
       ],

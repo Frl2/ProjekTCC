@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../screens/login_screen.dart';
 import '../screens/home_screen.dart';
-import '../screens/vehicle_list_screen.dart';
-import '../screens/driver_list_screen.dart';
-import '../screens/warehouse_list_screen.dart';
-import '../screens/route_list_screen.dart';
 import '../screens/shipment_list_screen.dart';
 
 class MainDrawer extends StatelessWidget {
@@ -35,10 +31,6 @@ class MainDrawer extends StatelessWidget {
             ),
           ),
           _buildItem(context, Icons.dashboard, 'Dashboard', const HomeScreen()),
-          _buildItem(context, Icons.local_shipping, 'Armada', const VehicleListScreen()),
-          _buildItem(context, Icons.person, 'Driver', const DriverListScreen()),
-          _buildItem(context, Icons.warehouse, 'Gudang', const WarehouseListScreen()),
-          _buildItem(context, Icons.map, 'Rute', const RouteListScreen()),
           _buildItem(context, Icons.inventory, 'Pengiriman', const ShipmentListScreen()),
           const Spacer(),
           const Divider(),

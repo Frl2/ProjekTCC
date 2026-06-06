@@ -9,6 +9,7 @@ class DriverService extends BaseService {
       final List data = response.data['data'];
       return data.map((e) => Driver.fromJson(e)).toList();
     } catch (e) {
+      print("Error fetching drivers: $e");
       return [];
     }
   }

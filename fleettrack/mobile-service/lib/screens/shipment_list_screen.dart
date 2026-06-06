@@ -37,7 +37,7 @@ class _ShipmentListScreenState extends State<ShipmentListScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text("Manajemen Pengiriman"),
+        title: const Text("Daftar Pengiriman"),
         backgroundColor: const Color(0xFF1e293b),
         foregroundColor: Colors.white,
       ),
@@ -57,11 +57,6 @@ class _ShipmentListScreenState extends State<ShipmentListScreen> {
                       },
                     ),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _openForm(),
-        backgroundColor: const Color(0xFF1a56db),
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
     );
   }
 

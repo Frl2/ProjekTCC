@@ -7,6 +7,7 @@ class DashboardService extends BaseService {
       final response = await logisticsDio.get(ApiConfig.stats);
       return response.data['data'];
     } catch (e) {
+      print("Error fetching stats: $e");
       return null;
     }
   }

@@ -23,7 +23,7 @@ async function runSQL(conn, sql) {
     .map(s => s.trim())
     .filter(s => s.length > 0 && !s.toUpperCase().startsWith('USE ') && !s.toUpperCase().startsWith('CREATE DATABASE'));
   for (const stmt of statements) {
-    try { await conn.execute(stmt); } catch (e) { /* skip duplicate */ }
+    try { await conn.query(stmt); } catch (e) { /* skip duplicate */ }
   }
 }
 
